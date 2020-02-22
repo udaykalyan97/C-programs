@@ -36,12 +36,10 @@ int matrix(int m,int n)
     int c[m][m];
     for(int i=0;i<m;i++)
     {
-        for(int j=0;j<m;i++)
+        for(int j=0;j<m;j++)
         {
             c[i][j]=0;
-            cout<<c[i][j]<<"\t";
         }
-        cout<<"\n";
     }
     for (int i=0;i<m;i++)
     {
@@ -50,12 +48,11 @@ int matrix(int m,int n)
             for(int k=0;k<n;k++)
             {
                c[i][j]+=a[i][k]*b[k][j];
-               cout<<c[i][j]<<"\t";
             }
+            cout<<c[i][j]<<"\t";
         }
         cout<<"\n";
     }
-  
 }
 int main()
 {
