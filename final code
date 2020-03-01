@@ -1,0 +1,87 @@
+/*This program creates a random matrix, calculates its transpose and
+outputs multiplication of this matrix and its transpose
+A - matrix of size mxn
+B - transpose of A nxm
+C - resultant multiplication of A x B
+*/
+//standard header files
+#include <bits/stdc++.h> 
+using namespace std; 
+
+// maximum size of matrix 
+#define M 5
+#define N 10
+// maximum number of threads 
+#define MAX_THREAD 4 
+
+int matA[M][N]; 
+int matB[N][M]; 
+int matC[M][M]; 
+int step_i = 0; 
+
+void* multi(void* arg) 
+{ 
+	int core = step_i++; 
+
+	// Each thread computes 1/4th of matrix multiplication 
+	for (int i = core * M / 4; i < (core + 1) * M / 4; i++) 
+		for (int j = 0; j < M; j++) 
+			for (int k = 0; k < N; k++) 
+				matC[i][j] += matA[i][k] * matB[k][j]; 
+} 
+
+// Driver Code 
+int main() 
+{ 
+	// Generating random values in matrix A 
+	for (int i = 0; i < M; i++) { 
+		for (int j = 0; j < N; j++) { 
+			matA[i][j] = rand() % 10; 
+		} 
+	} 
+	
+	// Displaying matrix A 
+	cout << endl 
+		<< "Matrix A" << endl; 
+	for (int i = 0; i < M; i++) { 
+		for (int j = 0; j < N; j++) 
+			cout << matA[i][j] << " "; 
+		cout << endl; 
+	}
+	// Displaying Transpose of the matrix B 
+	cout<<endl<<"Matrix B"<<endl;
+	for (int i=0;i<N;i++){
+		for(int j=0;j<M;j++){
+			matB[i][j]=matA[i][j];
+			cout<<matB[i][j]<<" ";
+	}	cout<<endl;
+}
+
+	// declaring four threads 
+	pthread_t threads[MAX_THREAD]; 
+
+	// Creating four threads, each evaluating its own part 
+	try{
+	for (int i = 0; i < MAX_THREAD; i++) { 
+		int* p; 
+		pthread_create(&threads[i], NULL, multi, (void*)(p)); 
+	} }
+    catch(...){
+        cout<<"error detected";
+    }
+	// joining and waiting for all threads to complete 
+	for (int i = 0; i < MAX_THREAD; i++) 
+		pthread_join(threads[i], NULL);	 
+
+	// Displaying the result matrix 
+	cout << endl 
+		<< "Multiplication of A and B" << endl; 
+	for (int i = 0; i < M; i++) { 
+		for (int j = 0; j < M; j++){ 
+			cout << matC[i][j] << "\t";
+		}
+		cout << endl; 
+	} 
+	return 0; 
+
+} 
